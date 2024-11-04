@@ -26,7 +26,7 @@ if (isset($_SESSION['last_activity']) &&
 }
 ```
 
-### Best Practices di Sicurezza
+### Buone pratiche di Sicurezza
 
 1. **Prevenzione XSS**
    - Sanitizza sempre l'output con `htmlspecialchars()`

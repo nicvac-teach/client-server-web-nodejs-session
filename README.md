@@ -8,6 +8,6 @@ La scelta tra sessioni e cookie dipende dalle specifiche esigenze del tuo proget
 
 ## [Esempi pratici e vulnerabilità](./_doc_/03_esempi+vulnerabilita.md)
 
-## [Implementazione Sicura e Best Practices](./_doc_/04_sicuro+best_practice.md)
+## [Implementazione sicura e Buone pratiche](./_doc_/04_sicuro+best_practice.md)
 
-## [Esercitazione](./_doc_/05_esercitazione.md)
+## [Esercitazione: la sessione in Node.js](./_doc_/05_esercitazione.md)
