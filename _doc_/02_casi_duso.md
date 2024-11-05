@@ -75,7 +75,7 @@ Codice ID, da usare in combinazione con una sessione
 setcookie('remember_token', 'abc123', time() + (86400 * 365));
 ```
 
-Dati di analisi e tracking, ad usi statistici inter
+Dati di analisi e tracking, ad usi statistici interni.
 ```php
 // Tracking analytics
 setcookie('last_visit', date('Y-m-d'), time() + (86400 * 30));

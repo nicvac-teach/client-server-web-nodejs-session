@@ -8,11 +8,13 @@ In questa guida, trasformeremo la nostra applicazione che usa i cookie in una ch
 ## Passo 1: Installare i Moduli Necessari
 Prima di tutto, dobbiamo installare due nuovi moduli:
 - `express-session`: per gestire le sessioni
+- `session-file-store`: per salvare le sessioni su file
 - `uuid`: per generare ID casuali
+
 
 Apri il terminale nella cartella del progetto e scrivi:
 ```bash
-yarn add express-session uuid session-file-store
+yarn add express-session session-file-store uuid
 ```
 
 ## Passo 2: Modificare app.js - Importare i Nuovi Moduli
