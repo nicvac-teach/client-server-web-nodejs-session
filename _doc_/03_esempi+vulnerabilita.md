@@ -3,6 +3,7 @@
 ## Esempi Pratici
 
 ### Esempio di Gestione Sessione
+In una pagina vengono impostate la variabili di sessione.
 ```php
 // Login semplice
 session_start();
@@ -16,7 +17,7 @@ if ($username === "mario" && $password === "password123") {
 }
 ```
 
-In un'altra pagina, verifica se l'utente è loggato:
+In un'altra pagina, usando le varibili di sessione impostate precedentemente, si verifica se l'utente è loggato:
 
 ```php
 session_start();
@@ -28,6 +29,7 @@ if (!isset($_SESSION['logged_in'])) {
 ```
 
 ### Esempio di Gestione Cookie
+Impostiamo una preferenza utente.
 ```php
 // Salva un cookie semplice
 setcookie('lingua', 'italiano', time() + (86400 * 30)); // dura 30 giorni
@@ -48,6 +50,8 @@ if (isset($_COOKIE['lingua'])) {
 ### Cross-Site Scripting (XSS)
 XSS è una vulnerabilità che permette agli attaccanti di iniettare codice JavaScript maligno nel tuo sito web. Questo codice viene poi eseguito nel browser degli utenti che visitano il sito.
 
+[Prima parte rimane invariata fino all'esempio di XSS]
+
 #### Esempio di Vulnerabilità XSS
 
 Ecco un esempio di codice vulnerabile, dove il parametro 'name' viene mostrato direttamente senza sanitizzazione:
@@ -60,15 +64,25 @@ echo "Benvenuto, " . $_GET['name'];
 
 Un attaccante potrebbe usare un URL come:
 `http://tuosito.com/welcome.php?name=<script>document.cookie</script>`
+
 Questo ruberebbe i cookie dell'utente.
 
-Ecco invece il codice sicuro:
+Ecco invece il codice sicuro che utilizza htmlspecialchars():
 
 ```php
 <?php
 echo "Benvenuto, " . htmlspecialchars($_GET['name'], ENT_QUOTES, 'UTF-8');
 ?>
 ```
+
+La funzione `htmlspecialchars()` converte i caratteri speciali HTML in entità HTML. Per esempio:
+- `<` diventa `&lt;`
+- `>` diventa `&gt;`
+- `"` diventa `&quot;`
+- `'` diventa `&#039;`
+
+Questo impedisce l'esecuzione di codice JavaScript maligno, perché il browser interpreterà i caratteri speciali come testo da visualizzare e non come codice da eseguire. Nell'esempio precedente, l'output sarebbe:
+`Benvenuto, &lt;script&gt;document.cookie&lt;/script&gt;`
 
 #### Come i Cookie sono Vulnerabili a XSS
 

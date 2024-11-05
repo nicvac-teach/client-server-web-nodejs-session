@@ -2,6 +2,8 @@
 
 ## Vantaggi e Svantaggi
 
+![alt text](sess_v_s.png)
+
 ### Vantaggi delle Sessioni
 1. **Sicurezza**: I dati sono memorizzati sul server, non accessibili direttamente dal client
 2. **Capacità**: Possono memorizzare grandi quantità di dati
@@ -13,6 +15,8 @@
 2. **Scalabilità**: Possono creare problemi in architetture distribuite
 3. **Timeout**: Necessitano di una gestione della scadenza
 4. **Dipendenza dal server**: Richiedono una gestione centralizzata
+
+![alt text](cookies_v_s.png)
 
 ### Vantaggi dei Cookie
 1. **Performance**: Non consumano risorse sul server
@@ -29,6 +33,8 @@
 ## Quando Usare Cosa
 
 ### Usa le Sessioni per:
+
+Gestione dell'autenticazione
 ```php
 // Gestione dell'autenticazione
 session_start();
@@ -36,6 +42,7 @@ $_SESSION['user_id'] = 123;
 $_SESSION['user_role'] = 'admin';
 ```
 
+Carrello di e-commerce
 ```php
 // Carrello e-commerce
 session_start();
@@ -45,6 +52,7 @@ $_SESSION['cart'] = [
 ];
 ```
 
+Dati sensibili
 ```php
 // Dati sensibili temporanei
 session_start();
@@ -55,16 +63,19 @@ $_SESSION['payment_info'] = [
 ```
 
 ### Usa i Cookie per:
+Preferenze utente estetiche
 ```php
 // Preferenze utente
 setcookie('theme', 'dark', time() + (86400 * 30)); // 30 giorni
 ```
 
+Codice ID, da usare in combinazione con una sessione
 ```php
 // Remember me
 setcookie('remember_token', 'abc123', time() + (86400 * 365));
 ```
 
+Dati di analisi e tracking, ad usi statistici inter
 ```php
 // Tracking analytics
 setcookie('last_visit', date('Y-m-d'), time() + (86400 * 30));

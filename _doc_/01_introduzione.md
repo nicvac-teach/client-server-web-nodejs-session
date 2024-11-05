@@ -26,6 +26,9 @@ Questa caratteristica del protocollo HTTP crea diverse sfide per lo sviluppo di 
 
 ## Sessioni vs Cookie: Differenze Fondamentali
 
+![alt text](./cookies_vs_session.png)
+
+
 ### Cookie
 I cookie sono piccoli file di testo memorizzati sul **browser dell'utente** che contengono informazioni come:
 - Preferenze utente
@@ -39,6 +42,8 @@ Le sessioni sono memorizzate sul **server** e contengono:
 - Stato dell'applicazione
 - Informazioni sensibili
 - Dati temporanei di navigazione
+
+
 
 
 [⬅️ [TORNA ALL'INDICE] ](../README.md)
