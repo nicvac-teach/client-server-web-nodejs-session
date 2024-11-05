@@ -6,8 +6,8 @@ La scelta tra sessioni e cookie dipende dalle specifiche esigenze del tuo proget
 
 ## [Vantaggi, Svantaggi e Casi d'uso](./_doc_/02_casi_duso.md)
 
-## [Esempi pratici e vulnerabilità](./_doc_/03_esempi+vulnerabilita.md)
+## [Esempi pratici di Sessioni e Cookies](./_doc_/03_esempi.md)
 
-## [Implementazione sicura e Buone pratiche](./_doc_/04_sicuro+best_practice.md)
+## [Vulnerabilità di sicurezza](./_doc_/04_vulnerabilita_sicurezza.md)
 
 ## [Esercitazione: la sessione in Node.js](./_doc_/05_esercitazione.md)
