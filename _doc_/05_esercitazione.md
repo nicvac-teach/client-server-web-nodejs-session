@@ -12,7 +12,7 @@ Prima di tutto, dobbiamo installare due nuovi moduli:
 
 Apri il terminale nella cartella del progetto e scrivi:
 ```bash
-yarn add express-session uuid
+yarn add express-session uuid session-file-store
 ```
 
 ## Passo 2: Modificare app.js - Importare i Nuovi Moduli
@@ -20,6 +20,7 @@ In cima al file `app.js`, dopo gli import esistenti, aggiungi:
 ```javascript
 const session = require('express-session');
 const { v4: uuidv4 } = require('uuid');
+const FileStore = require('session-file-store')(session);
 ```
 In questo modo dichiariamo gli oggetti che serviranno a gestire le sessioni e creare ID casuali. Ogni ID generato sarà legato ad una sessione.
 
@@ -27,6 +28,10 @@ In questo modo dichiariamo gli oggetti che serviranno a gestire le sessioni e cr
 Dopo la riga `app.use(cookieParser());`, aggiungi questa configurazione:
 ```javascript
 app.use(session({
+    store: new FileStore({
+        path: './sessions',  // cartella dove salvare i file delle sessioni
+        ttl: 86400          // tempo di vita della sessione in secondi (24 ore)
+    }),
     secret: 'la mia chiave segreta',  // Chiave per cifrare la sessione
     resave: false,
     saveUninitialized: true,
@@ -35,7 +40,8 @@ app.use(session({
     }
 }));
 ```
-
+- `path`: la cartella dove verranno salvati i file delle sessioni
+- `ttl`: il tempo di vita della sessione in secondi
 - `secret`: è una chiave che serve a cifrare i dati della sessione
 - `resave`: false significa che la sessione non viene salvata se non è stata modificata
 - `saveUninitialized`: true permette di salvare sessioni vuote
@@ -284,7 +290,7 @@ Quando l'utente torna alla home page dopo il logout:
    - Ora: `destroy()` cancella automaticamente tutta la sessione
 
 ## File Creati Automaticamente
-Express-session creerà automaticamente una cartella `sessions` nel tuo progetto dove verranno salvati i dati delle sessioni. Non devi fare nulla di particolare, viene gestito tutto in automatico!
+Express-session creerà automaticamente una cartella `sessions` nel tuo progetto dove verranno salvati i dati delle sessioni. In questo modo le sessioni sopravvivono ai riavvii del server. Non devi fare nulla di particolare, viene gestito tutto in automatico! 
 
 ## Test dell'Applicazione
 1. Da Terminale, interrompere con Ctrl-C eventuali esecuzioni precedenti ed avviare la versione aggiornata:
@@ -294,12 +300,24 @@ node backend/app.js
 
 2. Aprire la finestra PORTS, copiare e incollare l'indirizzo web nel Simple Browser o su un Web Browser.
 
-<img src="./ports.png" alt="sb" width="90%"/>
+<img src="./ports.png" alt="sb" width="70%"/>
 
 3. Inserisci il tuo nome nel form
 4. Vedrai il messaggio di benvenuto
 5. Chiudi e riapri il browser: vedrai il messaggio "Bentornato"
-6. Clicca su Logout per cancellare la sessione
+
+6. Ispezionare i cookie creati nel browser. Ad esempio da Chrome, mentre visualizzi la nostra web app, premere F12. I cookie creati sono visibili e ispezionabili, come nella figura seguente:
+
+<img src="./cookies.png" alt="sb" width="70%"/>
+
+Da notare che il valore registrato nel cookie ora è solo un valore alfanumerico. Il nome, che è un dato sensibile, non è più visibile.
+
+7. Ispezionare la directory `sessions` ed aprire il file di sessione memorizzato sul server. Il campo `nome` è visibile nel file.
+
+<img src="./sessions.png" alt="sb" width="70%"/>
+
+7. Clicca su Logout per cancellare la sessione.
+8. Ripetere tutto i processo un'altra volta.
 
 Se tutto funziona, hai trasformato con successo l'applicazione da cookie a sessioni! 🥳
 
