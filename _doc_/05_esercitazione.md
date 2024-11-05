@@ -294,8 +294,7 @@ node backend/app.js
 
 2. Aprire la finestra PORTS, copiare e incollare l'indirizzo web nel Simple Browser o su un Web Browser.
 
-<img src="./ports.png" alt="sb" width="70%"/>
-
+<img src="./ports.png" alt="sb" width="90%"/>
 
 3. Inserisci il tuo nome nel form
 4. Vedrai il messaggio di benvenuto
